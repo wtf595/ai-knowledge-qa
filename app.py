@@ -1,15 +1,15 @@
 import os
-import re
-import streamlit as st
 from openai import OpenAI
-from dotenv import load_dotenv
+import streamlit as st
 
-# 加载 .env 文件
-load_dotenv()
+# 优先从 Streamlit Secrets 读取，本地开发时回退到环境变量
+try:
+    api_key = st.secrets["DEEPSEEK_API_KEY"]
+except (KeyError, FileNotFoundError):
+    api_key = os.getenv("DEEPSEEK_API_KEY")
 
-# 初始化 DeepSeek 客户端
 client = OpenAI(
-    api_key=os.getenv("DEEPSEEK_API_KEY"),
+    api_key=api_key,
     base_url="https://api.deepseek.com"
 )
 
